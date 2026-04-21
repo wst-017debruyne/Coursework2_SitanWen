@@ -18,15 +18,21 @@
 %% TASK 1 - READ TEMPERATURE DATA, PLOT, AND WRITE TO A LOG FILE [20 MARKS]
 disp('Task 1')
 disp('(b)')
-duration = 300;
+duration = 600;                                                             %记得改成600s!!!!!!!!
 
 all_temper = [];
+record = zeros(2, 0);                                                       %这里是记录的集合变量
 for n = 1:duration
     voltage = readVoltage(a, 'A0');
     temperature = (voltage-0.5)/0.01;
     all_temper = [all_temper, temperature];
     disp(temperature)
-    pause(0.1);
+    judgement = floor(n/60);
+    if (n/60)-judgement ==0                                                 %写到这里了 继续改记得
+
+
+    end
+    pause(1);
 end
             
 max_temp = max(all_temper); 
@@ -38,9 +44,10 @@ fprintf('The average temperature: %.4f.\n', aver_temp);
 
 
 disp('c')
-x= linspace(0,299,300);
+x= linspace(0,599,600);
 plot(x, all_temper)
-
+xlabel('Time/s')
+ylabel('Temperature ^\circ C');
 
 
 
