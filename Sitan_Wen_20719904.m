@@ -14,15 +14,15 @@
     % end
 
 
-
+% a= arduino;
 %% TASK 1 - READ TEMPERATURE DATA, PLOT, AND WRITE TO A LOG FILE [20 MARKS]
 disp('Task 1')
 disp('(b)')
-duration = 120;                                                             %记得改成600s!!!!!!!!
+duration = 60;                                                             %记得改成600s!!!!!!!!
 
 all_temper = [];
-record = zeros(2, 0);                                                       %这里是记录的集合变量
-for n = 1:duration
+record = zeros(2, 0);                                                       
+for n = 1:duration                                                          %read the voltage and transmit it into temperature
     voltage = readVoltage(a, 'A0');
     temperature = (voltage-0.5)/0.01;
     all_temper = [all_temper, temperature];
@@ -67,7 +67,7 @@ for dat = 1:size(record,1)
     time = record(dat, 1);
     spe_temper = record(dat, 2);
 
-    fprintf2(text,'%-*s %.2f\n', width, 'minute:', time);
+    fprintf2(text,'%-*s %.2f\n', width, 'Minute:', time);
     fprintf2(text,'%-*s %.2f C\n', width, 'Temperature:', spe_temper);
     fprintf2(text,'\n')
 end
@@ -85,7 +85,6 @@ fclose(text);                                                               %clo
 function fprintf2(text, varargin)
      fprintf(varargin{:});
      fprintf(text, varargin{:});
-
 end
 
 
@@ -94,6 +93,9 @@ end
 %% TASK 2 - LED TEMPERATURE MONITORING DEVICE IMPLEMENTATION [25 MARKS] 
 
 % Insert answers here
+
+temp_monitor(a);
+
 
 
 %% TASK 3 - ALGORITHMS – TEMPERATURE PREDICTION [30 MARKS]
