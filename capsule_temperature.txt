@@ -1,0 +1,14 @@
+Data logging initiated - 04/24/2026 
+Location- london
+
+minute:         1.00
+Temperature:    23.80 C
+
+minute:         2.00
+Temperature:    23.80 C
+
+Max temp        25.76 C
+Min temp        23.31 C
+Average temp    24.14 C
+
+Data logging terminated.

@@ -39,9 +39,9 @@ end
 max_temp = max(all_temper); 
 min_temp = min(all_temper);
 aver_temp = mean(all_temper);
-fprintf('The maximum temperature: %.4f.\n', max_temp);
-fprintf('The minimum temperature: %.4f.\n', min_temp);
-fprintf('The average temperature: %.4f.\n', aver_temp);
+fprintf('The maximum temperature: %.2f.\n', max_temp);
+fprintf('The minimum temperature: %.2f.\n', min_temp);
+fprintf('The average temperature: %.2f.\n', aver_temp);
 
 
 disp('c')
@@ -56,7 +56,7 @@ t=datetime('now','Format','MM/dd/uuuu');
 location= input('Please input the location Name: ','s');
 fprintf('\n');
 
-text = fopen('capsule_temperature.txt');                                    %open the txt file
+text = fopen('capsule_temperature.txt', 'w');                               %open the txt file
 
 fprintf2(text,'Data logging initiated - %s \n',t);                          %Print the instant result at the specific minute
 fprintf2(text,'Location- %s\n',location);
@@ -75,10 +75,12 @@ end
 fprintf2(text,'%-*s %.2f C\n', width, 'Max temp ', max_temp);
 fprintf2(text,'%-*s %.2f C\n', width, 'Min temp ', min_temp);
 fprintf2(text,'%-*s %.2f C\n', width, 'Average temp ', aver_temp);
+fprintf2(text,'\n')
 
-fprintf2('Data logging terminated')
+fprintf2(text,'Data logging terminated.\n')
 
 fclose(text);                                                               %close the txt file
+
 
 function fprintf2(text, varargin)
      fprintf(varargin{:});
