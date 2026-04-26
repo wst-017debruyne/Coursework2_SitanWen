@@ -8,25 +8,33 @@ function temp_monitor(a)
 % (>24°C), while the temperature graph refreshes every 1 second without
 % blocking LED responses. Input 'a' is the Arduino connection object.
     
-    insta_time=[];
+    insta_time=[];                                                          %不能用实时的 需要滤波处理
     insta_temp=[];
     last_plot_t = tic;                                                      %this is to use a timer to measure time from last plotted time.
     start_t = tic;                                                          %this is to use a timer to measure time from the beginning.
 
-    while true  
+    while true
         vol=readVoltage(a, "A0");
         temp=(vol-0.5)/0.01;
     
-        if temp <=18
+        if temp <=20                                                        %change the temperature range here
             writeDigitalPin(a,"A3",0)
+            writeDigitalPin(a,"A5",0)
+
             writeDigitalPin(a,"A4",1)
             pause(0.5)
             writeDigitalPin(a,"A4",0)
             pause(0.5)
-        elseif temp<=24
+        elseif temp<=35
+            writeDigitalPin(a,"A4",0)
+            writeDigitalPin(a,"A5",0)
+
             writeDigitalPin(a,"A3",1)
         else
             writeDigitalPin(a,"A3",0)
+            writeDigitalPin(a,"A4",0)
+            writeDigitalPin(a,"A5",0)
+
             writeDigitalPin(a,"A5",1)
             pause(0.25)
             writeDigitalPin(a,"A5",0)
