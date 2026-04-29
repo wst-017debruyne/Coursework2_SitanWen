@@ -8,40 +8,21 @@ function temp_monitor(a)
 % (>24°C), while the temperature graph refreshes every 1 second without
 % blocking LED responses. Input 'a' is the Arduino connection object.
     
-    insta_time=[];                                                          %不能用实时的 需要滤波处理
+    insta_time=[];                                                         
     insta_temp=[];
     last_plot_t = tic;                                                      %this is to use a timer to measure time from last plotted time.
     start_t = tic;                                                          %this is to use a timer to measure time from the beginning.
 
-    while true
-        vol=readVoltage(a, "A0");
+    temp = 0;
+
+    circ = 0;
+
+    while circ<=1
+        % pause(0.02);  
+        vol = readVoltage(a,"A0");
         temp=(vol-0.5)/0.01;
-    
-        if temp <=20                                                        %change the temperature range here
-            writeDigitalPin(a,"A3",0)
-            writeDigitalPin(a,"A5",0)
+        disp(temp)
 
-            writeDigitalPin(a,"A4",1)
-            pause(0.5)
-            writeDigitalPin(a,"A4",0)
-            pause(0.5)
-        elseif temp<=35
-            writeDigitalPin(a,"A4",0)
-            writeDigitalPin(a,"A5",0)
-
-            writeDigitalPin(a,"A3",1)
-        else
-            writeDigitalPin(a,"A3",0)
-            writeDigitalPin(a,"A4",0)
-            writeDigitalPin(a,"A5",0)
-
-            writeDigitalPin(a,"A5",1)
-            pause(0.25)
-            writeDigitalPin(a,"A5",0)
-            pause(0.25)
-        end
-    
-    
         if toc(last_plot_t)>=1                                              %plot the graph. when the time detected is larger than the last plotted time, it began to plot again
             current_t = toc(start_t);
             insta_time = [insta_time,current_t];                            %list the x range
@@ -55,7 +36,39 @@ function temp_monitor(a)
             last_plot_t = tic;                                              %reset the timer.
         end
 
-        pause(0.02);
+
+    
+        if temp <=30                                                        %change the temperature range here
+            writeDigitalPin(a,"A3",0)
+            writeDigitalPin(a,"A5",0)
+
+            writeDigitalPin(a,"A4",1)
+            pause(0.5)
+            writeDigitalPin(a,"A4",0)
+            pause(0.5)
+        elseif temp<=35
+            writeDigitalPin(a,"A4",0)
+            writeDigitalPin(a,"A5",0)
+
+            writeDigitalPin(a,"A3",1)
+            pause(1)
+        else
+            writeDigitalPin(a,"A3",0)
+            writeDigitalPin(a,"A4",0)
+            writeDigitalPin(a,"A5",0)
+
+            writeDigitalPin(a,"A5",1)
+            pause(0.25)
+            writeDigitalPin(a,"A5",0)
+            pause(0.25)
+            writeDigitalPin(a,"A5",1)
+            pause(0.25)
+            writeDigitalPin(a,"A5",0)
+            pause(0.25)
+        end
+    
+        % pause(0.98);
+        circ = 0;
     end
 end
         
