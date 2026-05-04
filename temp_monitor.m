@@ -37,7 +37,7 @@ function temp_monitor(a)
 
 
     
-        if temp <=30                                                        %change the temperature range here
+        if temp <=18                                                        %change the temperature range here
             writeDigitalPin(a,"A3",0)
             writeDigitalPin(a,"A5",0)
 
@@ -45,7 +45,7 @@ function temp_monitor(a)
             pause(0.5)
             writeDigitalPin(a,"A4",0)
             pause(0.5)
-        elseif temp<=35
+        elseif temp<=24
             writeDigitalPin(a,"A4",0)
             writeDigitalPin(a,"A5",0)
 

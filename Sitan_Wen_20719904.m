@@ -7,8 +7,8 @@ if ~exist('a', 'var') || ~isa(a, 'arduino')                                 %che
     disp('Arduino connection established.');
 end
 
-ques = input(['Please input the question you wanna check: \n --preliminary' ...
-    ' task \n --Task 1\n --Task 2\n -- Task 3\n']);
+ques = input(['Please input the question you wanna check: \n 0--preliminary' ...
+    ' task \n 1--Task 1\n 2--Task 2\n 3-- Task 3\n']);
 switch ques
     case 0
 %% PRELIMINARY TASK - ARDUINO AND GIT INSTALLATION [5 MARKS]
@@ -29,7 +29,7 @@ switch ques
 
         all_temper = [];
         record = zeros(2, 0);                                                       
-        for n = 1:duration                                                    %read the voltage and transmit it into temperature
+        for n = 0:duration                                                    %read the voltage and transmit it into temperature
             voltage = readVoltage(a, 'A0');
             temperature = (voltage-0.5)/0.01;
             all_temper = [all_temper, temperature];

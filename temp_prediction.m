@@ -49,7 +49,7 @@ while circ == 0
         
         T1 = temp_box(1,1);
         T2 = temp_box(2,1);
-        delta_temp = (T2-T1)/1;                                           %use the temperature changing in 2s to calculate the rate.
+        delta_temp = (T2-T1)/1;                                             %use the temperature changing in 2s to calculate the rate.
         temp_rate = [temp_rate;delta_temp];
         
         if size(temp_rate,1)<2                                              %use size of the matrix to judge whether enough changing rate was obtained to compare the status. 
@@ -81,6 +81,7 @@ while circ == 0
 
         delta_t2 = temp_rate(2,1);
         temp_pred = T2+delta_t2*300;
+        disp(delta_temp);
         fprintf(['Real time temperature is: %.2f. Temperature expected ' ...
             'in 5 mintues: %.2f.\n'],T2, temp_pred)                             %print the real time temperature and predicted temperature in 5 minutes.
 
