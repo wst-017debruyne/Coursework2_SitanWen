@@ -12,34 +12,34 @@ function temp_prediction(a)
 % Input 'a' is the Arduino connection object.
 
 
-% temp_box = [];                                                            %This is to save the temperature
+temp_box = [];                                                              %This is to save the temperature
 temp_rate = [];                                                             %This is to save the temperature changing rate
 % repeat = 0;
 status_box =[];
 circ =0;
-temp_box = []; 
+
 while circ == 0
     repeat = 0;
     while repeat<1
         while size(temp_box,1) <2                                           %use size of the matrix to judge whether enough temperature was obtained to calculate the changing rate. 
             temp_t=[];
-            % for i =1:5
-            %     vol = readVoltage(a, "A0");
-            %     t = (vol-0.5)/0.01;
-            %     temp_t = [temp_t,t];
-            %     pause(0.2)
-            % end
-            % temp = mean(temp_t);                                          %use the mean value of temperature in one second to minimize the influence of temperature fluctuation.
-            vol = readVoltage(a, "A0");
-            temp = (vol-0.5)/0.01;
+            for i =1:5
+                vol = readVoltage(a, "A0");
+                t = (vol-0.5)/0.01;
+                temp_t = [temp_t,t];
+                pause(0.2)
+            end
+            temp = median(temp_t);                                          %use the mean value of temperature in one second to minimize the influence of temperature fluctuation.
+            % vol = readVoltage(a, "A0");
+            % temp = (vol-0.5)/0.01;
             temp_box = [temp_box;temp];
             % disp(temp)
-            pause(2)                                                        %set an time distance 2s
+            % pause(1)                                                        %set an time distance 2s
         end
     
         T1 = temp_box(1,1);
         T2 = temp_box(2,1);
-        delta_temp = (T2-T1)/2;                                             %use the temperature changing in 2s to calculate the rate (not by two different T2 values shown in the command window).
+        delta_temp = (T2-T1)/1;                                             %use the temperature changing in 2s to calculate the rate.
         temp_rate = [temp_rate;delta_temp];
         
         if size(temp_rate,1)<2                                              %use size of the matrix to judge whether enough changing rate was obtained to compare the status. 
@@ -51,7 +51,7 @@ while circ == 0
         end
         
     end
-    
+
     % delta_t1 = temp_rate(1,1);
     delta_t2 = temp_rate(2,1);
     temp_pred = T2+delta_t2*300;
@@ -97,7 +97,7 @@ while circ == 0
     % disp(temp_rate)
     circ = 0;
     status_box =[];
-    
+    pause(0.5)                                                              %this pause is cirtical for 
 end
 
 
