@@ -30,17 +30,17 @@ while circ == 0
             %     temp_t = [temp_t,t];
             %     pause(0.2)
             % end
-            % temp = mean(temp_t);                                            %use the mean value of temperature in one second to minimize the influence of temperature fluctuation.
+            % temp = mean(temp_t);                                          %use the mean value of temperature in one second to minimize the influence of temperature fluctuation.
             vol = readVoltage(a, "A0");
             temp = (vol-0.5)/0.01;
             temp_box = [temp_box;temp];
             % disp(temp)
-            pause(0.5)                                                      %set an extra time distance 0.2s
+            pause(1)                                                        %set an time distance 0.5s
         end
     
         T1 = temp_box(1,1);
         T2 = temp_box(2,1);
-        delta_temp = (T2-T1)/0.5;                                           %use the temperature changing in 1.2s to calculate the rate (not by two different T2 values shown in the command window).
+        delta_temp = (T2-T1)/1;                                             %use the temperature changing in 0.5s to calculate the rate (not by two different T2 values shown in the command window).
         temp_rate = [temp_rate;delta_temp];
         
         if size(temp_rate,1)<2                                              %use size of the matrix to judge whether enough changing rate was obtained to compare the status. 
