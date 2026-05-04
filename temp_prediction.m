@@ -22,7 +22,7 @@ while circ == 0
     repeat = 0;
     temp_box = []; 
     while repeat<1
-        while size(temp_box,1) <2
+        while size(temp_box,1) <2                                           %use size of the matrix to judge whether enough temperature was obtained to calculate the changing rate. 
             temp_t=[];
             for i =1:5
                 vol = readVoltage(a, "A0");
@@ -30,19 +30,19 @@ while circ == 0
                 temp_t = [temp_t,t];
                 pause(0.2)
             end
-            temp = mean(temp_t);
+            temp = mean(temp_t);                                            %use the mean value of temperature in one second to minimize the influence of temperature fluctuation.
             temp_box = [temp_box;temp];
             % disp(temp)
-            pause(0.2)                                                             %set the time distance is 0.02s
+            pause(0.2)                                                      %set an extra time distance 0.2s
         end
     
         T1 = temp_box(1,1);
         T2 = temp_box(2,1);
-        delta_temp = (T2-T1)/1.2;
+        delta_temp = (T2-T1)/1.2;                                           %use the temperature changing in 1.2s to calculatet the rate
         temp_rate = [temp_rate;delta_temp];
         
-        if size(temp_rate,1)<2
-            temp_box = [];
+        if size(temp_rate,1)<2                                              %use size of the matrix to judge whether enough changing rate was obtained to compare the status. 
+            temp_box = [];                                                  %clear the temperature matrix to do a new temperature collection.
             repeat = 0;
         else 
             repeat = 1;  
@@ -51,15 +51,16 @@ while circ == 0
     
     % delta_t1 = temp_rate(1,1);
     delta_t2 = temp_rate(2,1);
-    temp_pred = delta_t2*300;
-    disp(temp_pred)
+    temp_pred = T2+delta_t2*300;
+    fprintf(['Real time temperature is: %.2f. Temperature expected ' ...
+        'in 5 mintues: %.2f.\n'],T2, temp_pred)
 
     % disp(temp_rate)
     
     for n = 1: size(temp_rate,1)
         i = temp_rate(n,1);
         if i < -4/60
-            status = 0;
+            status = 0;                                                     %use status to judge and control the light
             status_box = [status_box;status];
         elseif i <= 4/60
             status = 1;
@@ -75,13 +76,13 @@ while circ == 0
     delta_status1 = status_box(1,1);
     delta_status2 = status_box(2,1);
 
-    if delta_status2 ~= delta_status1
+    if delta_status2 ~= delta_status1                                       %compare the status of the temperature in two different time to judge whether the light should be switched off first. 
         writeDigitalPin(a,'A3',0)
         writeDigitalPin(a,'A4',0)
         writeDigitalPin(a,'A5',0)
     end
     
-    if delta_status2 ==0
+    if delta_status2 ==0                                                    %use the status to switch on different lights
         writeDigitalPin(a,'A4',1)
     elseif delta_status2 ==1
         writeDigitalPin(a,'A3',1)
