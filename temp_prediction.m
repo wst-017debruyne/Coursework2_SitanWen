@@ -17,6 +17,7 @@ temp_rate = [];                                                             %Thi
 % repeat = 0;
 status_box =[];
 circ =0;
+total_temp=[];                                                              %check the fluctuation
 
 while circ == 0
     repeat = 0;
@@ -26,6 +27,12 @@ while circ == 0
             for i =1:5
                 vol = readVoltage(a, "A0");
                 t = (vol-0.5)/0.01;
+                
+                total_temp = [total_temp,t];                                %check the fluctuation
+                x=1:length(total_temp);
+                plot(x,total_temp);
+                disp(t);
+
                 temp_t = [temp_t,t];
                 pause(0.2)
             end
@@ -80,24 +87,25 @@ while circ == 0
     delta_status2 = status_box(2,1);
 
     if delta_status2 ~= delta_status1                                       %compare the status of the temperature in two different time to judge whether the light should be switched off first. 
-        writeDigitalPin(a,'A3',0)
+        writeDigitalPin(a,'A2',0)
         writeDigitalPin(a,'A4',0)
         writeDigitalPin(a,'A5',0)
     end
-    
+
     if delta_status2 ==0                                                    %use the status to switch on different lights
         writeDigitalPin(a,'A4',1)
     elseif delta_status2 ==1
-        writeDigitalPin(a,'A3',1)
+        writeDigitalPin(a,'A2',1)
     else
         writeDigitalPin(a,'A5',1)
     end
-    
+
+
     temp_rate = temp_rate(2, 1); 
     % disp(temp_rate)
     circ = 0;
     status_box =[];
-    pause(0.5)                                                              %this pause is cirtical for 
+    pause(2)                                                              %this pause is cirtical for stablizing the voltage reading
 end
 
 
