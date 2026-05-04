@@ -17,10 +17,9 @@ temp_rate = [];                                                             %Thi
 % repeat = 0;
 status_box =[];
 circ =0;
-
+temp_box = []; 
 while circ == 0
     repeat = 0;
-    temp_box = []; 
     while repeat<1
         while size(temp_box,1) <2                                           %use size of the matrix to judge whether enough temperature was obtained to calculate the changing rate. 
             temp_t=[];
@@ -35,20 +34,22 @@ while circ == 0
             temp = (vol-0.5)/0.01;
             temp_box = [temp_box;temp];
             % disp(temp)
-            pause(1)                                                        %set an time distance 0.5s
+            pause(2)                                                        %set an time distance 2s
         end
     
         T1 = temp_box(1,1);
         T2 = temp_box(2,1);
-        delta_temp = (T2-T1)/1;                                             %use the temperature changing in 0.5s to calculate the rate (not by two different T2 values shown in the command window).
+        delta_temp = (T2-T1)/2;                                             %use the temperature changing in 2s to calculate the rate (not by two different T2 values shown in the command window).
         temp_rate = [temp_rate;delta_temp];
         
         if size(temp_rate,1)<2                                              %use size of the matrix to judge whether enough changing rate was obtained to compare the status. 
-            temp_box = [];                                                  %clear the temperature matrix to do a new temperature collection.
+            temp_box = T2;                                                  %clear the temperature matrix to do a new temperature collection.
             repeat = 0;
         else 
+            temp_box = T2;
             repeat = 1;  
         end
+        
     end
     
     % delta_t1 = temp_rate(1,1);
@@ -96,6 +97,7 @@ while circ == 0
     % disp(temp_rate)
     circ = 0;
     status_box =[];
+    
 end
 
 
