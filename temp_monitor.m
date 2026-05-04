@@ -1,4 +1,3 @@
-function temp_monitor(a)
 % TEMP_MONITOR Real-time temperature monitoring and LED control for Arduino
 % This function realizes continuous temperature monitoring via an LM35 
 % sensor,with corresponding LED actuation based on temperature ranges and 
@@ -7,7 +6,7 @@ function temp_monitor(a)
 % (<=18°C), green stays steady (18-24°C), red blinksat 0.25s intervals 
 % (>24°C), while the temperature graph refreshes every 1 second without
 % blocking LED responses. Input 'a' is the Arduino connection object.
-    
+function temp_monitor(a)
     insta_time=[];                                                         
     insta_temp=[];
     last_plot_t = tic;                                                      %this is to use a timer to measure time from last plotted time.
