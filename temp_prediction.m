@@ -24,21 +24,23 @@ while circ == 0
     while repeat<1
         while size(temp_box,1) <2                                           %use size of the matrix to judge whether enough temperature was obtained to calculate the changing rate. 
             temp_t=[];
-            for i =1:5
-                vol = readVoltage(a, "A0");
-                t = (vol-0.5)/0.01;
-                temp_t = [temp_t,t];
-                pause(0.2)
-            end
-            temp = mean(temp_t);                                            %use the mean value of temperature in one second to minimize the influence of temperature fluctuation.
+            % for i =1:5
+            %     vol = readVoltage(a, "A0");
+            %     t = (vol-0.5)/0.01;
+            %     temp_t = [temp_t,t];
+            %     pause(0.2)
+            % end
+            % temp = mean(temp_t);                                            %use the mean value of temperature in one second to minimize the influence of temperature fluctuation.
+            vol = readVoltage(a, "A0");
+            temp = (vol-0.5)/0.01;
             temp_box = [temp_box;temp];
             % disp(temp)
-            pause(0.2)                                                      %set an extra time distance 0.2s
+            pause(0.5)                                                      %set an extra time distance 0.2s
         end
     
         T1 = temp_box(1,1);
         T2 = temp_box(2,1);
-        delta_temp = (T2-T1)/1.2;                                           %use the temperature changing in 1.2s to calculatet the rate
+        delta_temp = (T2-T1)/0.5;                                           %use the temperature changing in 1.2s to calculate the rate (not by two different T2 values shown in the command window).
         temp_rate = [temp_rate;delta_temp];
         
         if size(temp_rate,1)<2                                              %use size of the matrix to judge whether enough changing rate was obtained to compare the status. 
@@ -53,13 +55,13 @@ while circ == 0
     delta_t2 = temp_rate(2,1);
     temp_pred = T2+delta_t2*300;
     fprintf(['Real time temperature is: %.2f. Temperature expected ' ...
-        'in 5 mintues: %.2f.\n'],T2, temp_pred)
+        'in 5 mintues: %.2f.\n'],T2, temp_pred)                             %print the real time temperature and predicted temperature in 5 minutes.
 
     % disp(temp_rate)
     
     for n = 1: size(temp_rate,1)
         i = temp_rate(n,1);
-        if i < -4/60
+        if i < -4/60                                                        %the unit of changing rate is C/s, so the boundary value 4 C/min should be substituded by 4/60 C/s.
             status = 0;                                                     %use status to judge and control the light
             status_box = [status_box;status];
         elseif i <= 4/60
