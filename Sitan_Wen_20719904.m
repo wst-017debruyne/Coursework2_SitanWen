@@ -52,7 +52,7 @@ switch ques
         fprintf('The minimum temperature: %.2f.\n', min_temp);
         fprintf('The average temperature: %.2f.\n', aver_temp);
 
-        disp('c')
+        disp('(c)')
         disp('The graph has been plotted.')
         x= linspace(0,duration,duration+1);                                  
         plot(x, all_temper)

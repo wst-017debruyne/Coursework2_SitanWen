@@ -1,7 +1,7 @@
 % TEMP_PREDICTION performs continuous temperature monitoring using an 
 % analog sensor on pin A0. The rate of temperature change is estimated 
 % from two successive averaged readings, each comprising five samples taken
-% at 0.1 s intervals and separated by 0.5 s. The trend is classified as 
+% at 0.2 s intervals and separated by 1.0 s. The trend is classified as 
 % cooling (< -0.0667 °C/s), stable (±0.0667 °C/s), or heating 
 % (> 0.0667 °C/s), and a 300-second-ahead prediction is obtained by linear 
 % extrapolation. LEDs connected to A4 (cooling), A3 (stable), and A5 
@@ -22,10 +22,10 @@ function temp_prediction(a)
 temp_box = [];                                                              %This is to save the temperature
 temp_rate = [];                                                             %This is to save the temperature changing rate
 % repeat = 0;
-status_box =[1;1];
+% status_box =[1;1];
 circ =0;
-total_temp=[];                                                              %check the fluctuation
 time = 0;
+previous_status = -1;                                                       %set as the initial status of the light
 
 writeDigitalPin(a,'A3',0)
 writeDigitalPin(a,'A4',0)
@@ -61,44 +61,41 @@ while circ == 0
         end
     end
     
-    if time/2-floor(time/2)==0                                                  %use two seconds as light judgement interval. This is t avoid the condition of temperature fluctuation caused by light status change.
+    delta_t2 = temp_rate(2,1);
+    temp_pred = T2+delta_t2*300;
+    % disp(delta_temp);
+    fprintf(['Real time temperature is: %.2f. The changing rate of ' ...
+        'temperature is:%.2f C/s. Temperature expected ' ...
+        'in 5 mintues: %.2f.\n'],T2, delta_t2, temp_pred)                       %print the real time temperature and predicted temperature in 5 minutes.
+
+
+    if time/2-floor(time/2)==0                                                  %use two seconds as light judgement interval. This is to avoid the condition of temperature fluctuation caused by light status change.
         for n = 1: size(temp_rate,1)
             i = temp_rate(n,1);
             if i < -4/60                                                        %the unit of changing rate is C/s, so the boundary value 4 C/min should be substituded by 4/60 C/s.
-                status = 0;                                                     %use status to judge and control the light
-                status_box = [status_box;status];
+                cur_status = 0;                                                 %use status to judge and control the light
             elseif i <= 4/60
-                status = 1;
-                status_box = [status_box;status];
+                cur_status = 1;
             else
-                status = 2;
-                status_box = [status_box;status];
+                cur_status = 2;
             end
         end
-    
-        delta_status1 = status_box(end-2,1);
-        delta_status2 = status_box(end,1);
+ 
 
-        delta_t2 = temp_rate(2,1);
-        temp_pred = T2+delta_t2*300;
-        disp(delta_temp);
-        fprintf(['Real time temperature is: %.2f. The changing rate of ' ...
-            'temperature is:%.2f. Temperature expected ' ...
-            'in 5 mintues: %.2f.\n'],T2, delta_t2, temp_pred)                   %print the real time temperature and predicted temperature in 5 minutes.
-
-        if delta_status2 ~= delta_status1                                       %compare the status of the temperature in two different time to judge whether the light should be switched off first. 
+        if cur_status ~= previous_status                                       %compare the status of the temperature in two different time to judge whether the light should be switched off first. 
             writeDigitalPin(a,'A3',0)
             writeDigitalPin(a,'A4',0)
             writeDigitalPin(a,'A5',0)
         end
 
-        if delta_status2 ==0                                                    %use the status to switch on different lights
+        if cur_status ==0                                                    %use the status to switch on different lights
             writeDigitalPin(a,'A4',1)
-        elseif delta_status2 ==1
+        elseif cur_status ==1
             writeDigitalPin(a,'A3',1)
         else
             writeDigitalPin(a,'A5',1)
         end
+        previous_status = cur_status;
     end   
 
     temp_rate = temp_rate(2, 1);    
