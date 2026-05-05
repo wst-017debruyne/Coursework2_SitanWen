@@ -33,10 +33,13 @@ switch ques
             voltage = readVoltage(a, 'A0');
             temperature = (voltage-0.5)/0.01;
             all_temper = [all_temper, temperature];
-            disp(temperature)
+            % disp(temperature)
             judgement = floor(n/60);
             if (n/60)-judgement ==0                                         %judge whether the data need to be recorded                                  
                 temp= [judgement, temperature];
+                output = sprintf(['The recorded temperature at %ds ' ...
+                    'is %.2f.'],n,temperature);
+                disp(output);
                 record= [record; temp];
             end
             pause(1);
@@ -51,7 +54,7 @@ switch ques
 
         disp('c')
         disp('The graph has been plotted.')
-        x= linspace(0,duration-1,duration);                                  
+        x= linspace(0,duration,duration+1);                                  
         plot(x, all_temper)
         xlabel('Time/s')
         ylabel('Temperature ^\circ C');
@@ -84,7 +87,7 @@ switch ques
 
         fprintf2(text,'Data logging terminated.\n')
 
-        fclose(text);                                                               %close the txt file
+        fclose(text);                                                       %close the txt file
 
     case 2
 %% TASK 2 - LED TEMPERATURE MONITORING DEVICE IMPLEMENTATION [25 MARKS] 

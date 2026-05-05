@@ -82,8 +82,9 @@ while circ == 0
         delta_t2 = temp_rate(2,1);
         temp_pred = T2+delta_t2*300;
         disp(delta_temp);
-        fprintf(['Real time temperature is: %.2f. Temperature expected ' ...
-            'in 5 mintues: %.2f.\n'],T2, temp_pred)                             %print the real time temperature and predicted temperature in 5 minutes.
+        fprintf(['Real time temperature is: %.2f. The changing rate of ' ...
+            'temperature is:%.2f. Temperature expected ' ...
+            'in 5 mintues: %.2f.\n'],T2, delta_t2, temp_pred)                   %print the real time temperature and predicted temperature in 5 minutes.
 
         if delta_status2 ~= delta_status1                                       %compare the status of the temperature in two different time to judge whether the light should be switched off first. 
             writeDigitalPin(a,'A3',0)
