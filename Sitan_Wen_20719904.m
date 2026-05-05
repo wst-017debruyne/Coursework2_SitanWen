@@ -37,8 +37,8 @@ switch ques
             judgement = floor(n/60);
             if (n/60)-judgement ==0                                         %judge whether the data need to be recorded                                  
                 temp= [judgement, temperature];
-                output = sprintf(['The recorded temperature at %ds ' ...
-                    'is %.2f.'],n,temperature);
+                output = sprintf(['Time(seconds)   %d \n' ...
+                    'Temperature(C)   %.2f'],n,temperature);
                 disp(output);
                 record= [record; temp];
             end
